@@ -1,0 +1,24 @@
+{
+ "main_path": {
+  "gated_lockbox": 0.2509,
+  "no_gate_lockbox": 0.2282,
+  "difference": 0.0227,
+  "interval_90": [
+   0.0146,
+   0.0302
+  ],
+  "gated_kept": 3,
+  "no_gate_kept": 7
+ },
+ "orderings": {
+  "pairs": 6,
+  "gate_wins": 6,
+  "mean_difference": 0.0218,
+  "gate_mean": 0.238,
+  "no_gate_mean": 0.2161,
+  "gate_range": [
+   0.2238,
+   0.2537
+  ]
+ }
+}

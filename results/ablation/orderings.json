@@ -1,0 +1,590 @@
+[
+ {
+  "rule": "dev_only",
+  "order_seed": 0,
+  "config": {
+   "adaptive_rate": 0.02,
+   "anchor": [],
+   "center": "last",
+   "condition": [
+    [
+     "provider_change",
+     0.3
+    ],
+    [
+     "last_dir",
+     0.3
+    ]
+   ],
+   "halflife_days": null,
+   "lookback_days": null,
+   "min_samples": 20.0,
+   "pool": "source_class",
+   "pool_weight": 20.0,
+   "self_gate_days": 90,
+   "self_gate_min": 9,
+   "self_gate_start_closed": false,
+   "step_quantiles": false,
+   "tail_scale": [
+    1.0,
+    1.0
+   ],
+   "vol_scale": false,
+   "width_scale": []
+  },
+  "tested": 81,
+  "kept": 8,
+  "dev_skill": 0.1597352425905686,
+  "gate_skill": 0.1593807496343883,
+  "lockbox_skill": 0.22098797305722329,
+  "lockbox_coverage": 0.7949000183452577
+ },
+ {
+  "rule": "gate",
+  "order_seed": 0,
+  "config": {
+   "adaptive_rate": 0.0,
+   "anchor": [],
+   "center": "drift",
+   "condition": [
+    [
+     "last_dir",
+     0.3
+    ]
+   ],
+   "halflife_days": null,
+   "lookback_days": null,
+   "min_samples": 20.0,
+   "pool": "source_class",
+   "pool_weight": 20.0,
+   "self_gate_days": null,
+   "self_gate_min": 9,
+   "self_gate_start_closed": false,
+   "step_quantiles": false,
+   "tail_scale": [
+    1.0,
+    1.0
+   ],
+   "vol_scale": false,
+   "width_scale": [
+    [
+     "hyperscaler_list",
+     0.6
+    ]
+   ]
+  },
+  "tested": 73,
+  "kept": 3,
+  "dev_skill": 0.13114986346616198,
+  "gate_skill": 0.18867755852069434,
+  "lockbox_skill": 0.23641698977195358,
+  "lockbox_coverage": 0.8068244358833242
+ },
+ {
+  "rule": "dev_only",
+  "order_seed": 1,
+  "config": {
+   "adaptive_rate": 0.0,
+   "anchor": [],
+   "center": "last",
+   "condition": [],
+   "halflife_days": null,
+   "lookback_days": null,
+   "min_samples": 20.0,
+   "pool": null,
+   "pool_weight": 20.0,
+   "self_gate_days": 45,
+   "self_gate_min": 6,
+   "self_gate_start_closed": true,
+   "step_quantiles": true,
+   "tail_scale": [
+    1.0,
+    1.25
+   ],
+   "vol_scale": false,
+   "width_scale": [
+    [
+     "*",
+     0.8
+    ]
+   ]
+  },
+  "tested": 71,
+  "kept": 7,
+  "dev_skill": 0.11977407859959455,
+  "gate_skill": 0.1441298135744823,
+  "lockbox_skill": 0.21182132997225045,
+  "lockbox_coverage": 0.7563749770684278
+ },
+ {
+  "rule": "gate",
+  "order_seed": 1,
+  "config": {
+   "adaptive_rate": 0.0,
+   "anchor": [],
+   "center": "drift",
+   "condition": [
+    [
+     "last_dir",
+     0.3
+    ]
+   ],
+   "halflife_days": null,
+   "lookback_days": null,
+   "min_samples": 20.0,
+   "pool": "source_class",
+   "pool_weight": 20.0,
+   "self_gate_days": null,
+   "self_gate_min": 9,
+   "self_gate_start_closed": false,
+   "step_quantiles": false,
+   "tail_scale": [
+    1.0,
+    1.0
+   ],
+   "vol_scale": false,
+   "width_scale": [
+    [
+     "hyperscaler_list",
+     0.6
+    ]
+   ]
+  },
+  "tested": 73,
+  "kept": 4,
+  "dev_skill": 0.13114986346616198,
+  "gate_skill": 0.18867755852069434,
+  "lockbox_skill": 0.23641698977195358,
+  "lockbox_coverage": 0.8068244358833242
+ },
+ {
+  "rule": "dev_only",
+  "order_seed": 3,
+  "config": {
+   "adaptive_rate": 0.0,
+   "anchor": [],
+   "center": "last",
+   "condition": [
+    [
+     "last_dir",
+     0.3
+    ],
+    [
+     "deviation",
+     0.3
+    ]
+   ],
+   "halflife_days": null,
+   "lookback_days": null,
+   "min_samples": 20.0,
+   "pool": "source_class",
+   "pool_weight": 20.0,
+   "self_gate_days": 90,
+   "self_gate_min": 9,
+   "self_gate_start_closed": false,
+   "step_quantiles": false,
+   "tail_scale": [
+    1.0,
+    1.0
+   ],
+   "vol_scale": false,
+   "width_scale": []
+  },
+  "tested": 80,
+  "kept": 8,
+  "dev_skill": 0.17420543770702412,
+  "gate_skill": 0.1815702508054915,
+  "lockbox_skill": 0.23134947254902305,
+  "lockbox_coverage": 0.8057237204182719
+ },
+ {
+  "rule": "dev_only",
+  "order_seed": 4,
+  "config": {
+   "adaptive_rate": 0.02,
+   "anchor": [],
+   "center": "last",
+   "condition": [],
+   "halflife_days": null,
+   "lookback_days": null,
+   "min_samples": 20.0,
+   "pool": null,
+   "pool_weight": 20.0,
+   "self_gate_days": 45,
+   "self_gate_min": 6,
+   "self_gate_start_closed": true,
+   "step_quantiles": false,
+   "tail_scale": [
+    1.0,
+    1.0
+   ],
+   "vol_scale": false,
+   "width_scale": [
+    [
+     "*",
+     0.8
+    ]
+   ]
+  },
+  "tested": 72,
+  "kept": 6,
+  "dev_skill": 0.11413011565361109,
+  "gate_skill": 0.12648918430776956,
+  "lockbox_skill": 0.21029484152639444,
+  "lockbox_coverage": 0.7534397358282884
+ },
+ {
+  "rule": "gate",
+  "order_seed": 4,
+  "config": {
+   "adaptive_rate": 0.0,
+   "anchor": [],
+   "center": "drift",
+   "condition": [
+    [
+     "last_dir",
+     0.3
+    ]
+   ],
+   "halflife_days": null,
+   "lookback_days": null,
+   "min_samples": 10.0,
+   "pool": null,
+   "pool_weight": 20.0,
+   "self_gate_days": null,
+   "self_gate_min": 9,
+   "self_gate_start_closed": false,
+   "step_quantiles": false,
+   "tail_scale": [
+    1.0,
+    1.0
+   ],
+   "vol_scale": false,
+   "width_scale": []
+  },
+  "tested": 67,
+  "kept": 2,
+  "dev_skill": 0.08965778482202635,
+  "gate_skill": 0.1879718172389211,
+  "lockbox_skill": 0.22379797268188728,
+  "lockbox_coverage": 0.8009539534030453
+ },
+ {
+  "rule": "dev_only",
+  "order_seed": 5,
+  "config": {
+   "adaptive_rate": 0.0,
+   "anchor": [],
+   "center": "last",
+   "condition": [
+    [
+     "provider_change",
+     0.3
+    ],
+    [
+     "deviation",
+     0.3
+    ]
+   ],
+   "halflife_days": null,
+   "lookback_days": 120,
+   "min_samples": 20.0,
+   "pool": "source_class",
+   "pool_weight": 20.0,
+   "self_gate_days": 45,
+   "self_gate_min": 9,
+   "self_gate_start_closed": false,
+   "step_quantiles": false,
+   "tail_scale": [
+    1.0,
+    1.0
+   ],
+   "vol_scale": false,
+   "width_scale": [
+    [
+     "*",
+     0.8
+    ]
+   ]
+  },
+  "tested": 78,
+  "kept": 11,
+  "dev_skill": 0.1357022962598231,
+  "gate_skill": 0.1689509156957395,
+  "lockbox_skill": 0.22977805603980483,
+  "lockbox_coverage": 0.735094478077417
+ },
+ {
+  "rule": "gate",
+  "order_seed": 5,
+  "config": {
+   "adaptive_rate": 0.0,
+   "anchor": [],
+   "center": "drift",
+   "condition": [
+    [
+     "deviation",
+     0.3
+    ],
+    [
+     "last_dir",
+     0.3
+    ]
+   ],
+   "halflife_days": null,
+   "lookback_days": null,
+   "min_samples": 20.0,
+   "pool": "source_class",
+   "pool_weight": 20.0,
+   "self_gate_days": null,
+   "self_gate_min": 9,
+   "self_gate_start_closed": false,
+   "step_quantiles": false,
+   "tail_scale": [
+    1.0,
+    1.0
+   ],
+   "vol_scale": false,
+   "width_scale": []
+  },
+  "tested": 74,
+  "kept": 3,
+  "dev_skill": 0.13577287005225347,
+  "gate_skill": 0.2074658467314644,
+  "lockbox_skill": 0.2536587936172314,
+  "lockbox_coverage": 0.8231517152815997
+ },
+ {
+  "rule": "dev_only",
+  "order_seed": 6,
+  "config": {
+   "adaptive_rate": 0.0,
+   "anchor": [],
+   "center": "last",
+   "condition": [],
+   "halflife_days": null,
+   "lookback_days": null,
+   "min_samples": 20.0,
+   "pool": null,
+   "pool_weight": 20.0,
+   "self_gate_days": 45,
+   "self_gate_min": 6,
+   "self_gate_start_closed": true,
+   "step_quantiles": true,
+   "tail_scale": [
+    1.0,
+    1.25
+   ],
+   "vol_scale": false,
+   "width_scale": [
+    [
+     "*",
+     0.8
+    ]
+   ]
+  },
+  "tested": 71,
+  "kept": 7,
+  "dev_skill": 0.11977407859959455,
+  "gate_skill": 0.1441298135744823,
+  "lockbox_skill": 0.21182132997225045,
+  "lockbox_coverage": 0.7563749770684278
+ },
+ {
+  "rule": "gate",
+  "order_seed": 6,
+  "config": {
+   "adaptive_rate": 0.0,
+   "anchor": [],
+   "center": "drift",
+   "condition": [
+    [
+     "deviation",
+     0.3
+    ],
+    [
+     "last_dir",
+     0.3
+    ]
+   ],
+   "halflife_days": null,
+   "lookback_days": null,
+   "min_samples": 20.0,
+   "pool": "source_class",
+   "pool_weight": 20.0,
+   "self_gate_days": null,
+   "self_gate_min": 9,
+   "self_gate_start_closed": false,
+   "step_quantiles": false,
+   "tail_scale": [
+    1.0,
+    1.0
+   ],
+   "vol_scale": false,
+   "width_scale": []
+  },
+  "tested": 73,
+  "kept": 4,
+  "dev_skill": 0.13577287005225347,
+  "gate_skill": 0.2074658467314644,
+  "lockbox_skill": 0.2536587936172314,
+  "lockbox_coverage": 0.8231517152815997
+ },
+ {
+  "rule": "dev_only",
+  "order_seed": 7,
+  "config": {
+   "adaptive_rate": 0.0,
+   "anchor": [],
+   "center": "last",
+   "condition": [
+    [
+     "last_dir",
+     0.3
+    ]
+   ],
+   "halflife_days": null,
+   "lookback_days": null,
+   "min_samples": 10.0,
+   "pool": "source_class",
+   "pool_weight": 20.0,
+   "self_gate_days": 90,
+   "self_gate_min": 9,
+   "self_gate_start_closed": false,
+   "step_quantiles": true,
+   "tail_scale": [
+    1.0,
+    1.0
+   ],
+   "vol_scale": false,
+   "width_scale": [
+    [
+     "*",
+     0.8
+    ]
+   ]
+  },
+  "tested": 77,
+  "kept": 10,
+  "dev_skill": 0.14844277623746105,
+  "gate_skill": 0.16361783917458417,
+  "lockbox_skill": 0.21201278782546096,
+  "lockbox_coverage": 0.7279398275545771
+ },
+ {
+  "rule": "gate",
+  "order_seed": 7,
+  "config": {
+   "adaptive_rate": 0.0,
+   "anchor": [],
+   "center": "drift",
+   "condition": [
+    [
+     "last_dir",
+     0.3
+    ]
+   ],
+   "halflife_days": null,
+   "lookback_days": null,
+   "min_samples": 10.0,
+   "pool": null,
+   "pool_weight": 20.0,
+   "self_gate_days": null,
+   "self_gate_min": 9,
+   "self_gate_start_closed": false,
+   "step_quantiles": false,
+   "tail_scale": [
+    1.0,
+    1.0
+   ],
+   "vol_scale": false,
+   "width_scale": []
+  },
+  "tested": 66,
+  "kept": 2,
+  "dev_skill": 0.08965778482202635,
+  "gate_skill": 0.1879718172389211,
+  "lockbox_skill": 0.22379797268188728,
+  "lockbox_coverage": 0.8009539534030453
+ },
+ {
+  "rule": "gate",
+  "order_seed": 8,
+  "config": {
+   "adaptive_rate": 0.0,
+   "anchor": [],
+   "center": "drift",
+   "condition": [
+    [
+     "last_dir",
+     0.3
+    ],
+    [
+     "offer_trend",
+     0.3
+    ]
+   ],
+   "halflife_days": null,
+   "lookback_days": null,
+   "min_samples": 20.0,
+   "pool": "source_class",
+   "pool_weight": 20.0,
+   "self_gate_days": null,
+   "self_gate_min": 9,
+   "self_gate_start_closed": false,
+   "step_quantiles": false,
+   "tail_scale": [
+    1.0,
+    1.0
+   ],
+   "vol_scale": false,
+   "width_scale": []
+  },
+  "tested": 75,
+  "kept": 4,
+  "dev_skill": 0.13487780966790197,
+  "gate_skill": 0.1960131200915256,
+  "lockbox_skill": 0.2413414694938486,
+  "lockbox_coverage": 0.8081086039258851
+ },
+ {
+  "rule": "gate",
+  "order_seed": 9,
+  "config": {
+   "adaptive_rate": 0.0,
+   "anchor": [],
+   "center": "drift",
+   "condition": [
+    [
+     "deviation",
+     0.3
+    ],
+    [
+     "last_dir",
+     0.3
+    ]
+   ],
+   "halflife_days": null,
+   "lookback_days": null,
+   "min_samples": 20.0,
+   "pool": "source_class",
+   "pool_weight": 20.0,
+   "self_gate_days": null,
+   "self_gate_min": 9,
+   "self_gate_start_closed": false,
+   "step_quantiles": false,
+   "tail_scale": [
+    1.0,
+    1.0
+   ],
+   "vol_scale": false,
+   "width_scale": []
+  },
+  "tested": 73,
+  "kept": 4,
+  "dev_skill": 0.13577287005225347,
+  "gate_skill": 0.2074658467314644,
+  "lockbox_skill": 0.2536587936172314,
+  "lockbox_coverage": 0.8231517152815997
+ }
+]

@@ -68,6 +68,32 @@ The gain comes from marketplace asks, neocloud rate cards and the aggregator's c
 
 **What the language model tried.** Shown the results so far, it proposed 16 hypotheses in two rounds; 13 were new tests. Its ideas were more specific than our seeds: wider intervals for new-generation marketplace asks; prices "cut quickly and raised slowly" as Blackwell supply ramps; a stale price under a shrinking offer count as a joint signal; a 2-day median for the aggregator's flickering cheapest-offer series. All were rejected on the development dates. The only two that gained there both narrowed rate-card intervals (+0.017 and +0.016) and both lost at the gate (-0.009 and -0.007). A model reasoning from the same development results walked into the same overfit that the mechanical search had, and the gate caught it both times.
 
+## Does the gate make the forecasts better, or does it only reject more?
+
+We reran the identical loop with the gate switched off, so that any hypothesis that improved the development dates was kept, and scored both final methods on the lockbox.
+
+| Loop | Hypotheses kept | Skill on development dates | Skill on lockbox dates |
+| --- | --- | --- | --- |
+| With the gate (submitted) | 3 | +0.135 | **+0.251** |
+| Without the gate | 7 | +0.174 | +0.228 |
+
+Without the gate the loop kept more than twice as many ideas and looked better on the dates it could see. On the untouched dates it was worse by 0.023 skill (90% interval 0.015 to 0.030). Among the four extra ideas it kept was self-grading with a 90-day window, the largest false win in the log.
+
+**The same comparison across 6 orderings of the hypothesis list, run in parallel on Modal.** The loop is greedy, so one run is one path. We shuffled the seed list 6 ways and ran the gated loop and the no-gate loop on each, one container per run, each scoring its own final method on the lockbox.
+
+| Ordering | Gate: kept | Gate: dev | Gate: lockbox | No gate: kept | No gate: dev | No gate: lockbox | Difference |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | 3 | +0.131 | +0.236 | 8 | +0.160 | +0.221 | +0.015 |
+| 1 | 4 | +0.131 | +0.236 | 7 | +0.120 | +0.212 | +0.025 |
+| 4 | 2 | +0.090 | +0.224 | 6 | +0.114 | +0.210 | +0.014 |
+| 5 | 3 | +0.136 | +0.254 | 11 | +0.136 | +0.230 | +0.024 |
+| 6 | 4 | +0.136 | +0.254 | 7 | +0.120 | +0.212 | +0.042 |
+| 7 | 2 | +0.090 | +0.224 | 10 | +0.148 | +0.212 | +0.012 |
+
+The gated loop won on the lockbox in 6 of 6 orderings, by +0.022 skill on average (+0.238 against +0.216). The no-gate loop kept 8.2 hypotheses on average against 3.0.
+
+**What this also shows about our own result.** Across these orderings the gated loop's lockbox skill ranged from +0.224 to +0.254. The submitted run, in the order we happened to write the hypotheses, scored +0.251, at the top of that range. So the fair statement is: the gate reliably beats no gate, the gated loop reliably beats the drift baseline (+0.204), and the size of the gain depends on the path, with +0.251 on the favourable end.
+
 ## Why the gain is modest, and where the error is
 
 After the first run we measured where the remaining error sits, on the gate dates only.
@@ -92,6 +118,8 @@ Posted offers are asks, not transactions, so we tested whether the number of liv
 | Rising by more than 5% | 0.22 / 0.10 | 0.31 / 0.25 |
 
 A falling offer count did not raise the chance of an upward step in the search period. On the lockbox it came with more steps in both directions. In this data a changing offer count signals that a price is about to move, not which way. Full tables for every state are in [results/state_experiments.json](results/state_experiments.json).
+
+**One series, to make it concrete.** The series that carries the most error is one collector's marketplace ask for the B300, on demand. Its posted median went from $4.99 on August 4 to $11.52 on November 6, 2026. On that one series the hypothesis looks right: when the offer count was falling, the price was higher a week later 54% of the time and lower 12% of the time; when the offer count was rising, it was lower 57% of the time. On the same collector's H100 marketplace ask it reverses: a rising offer count came before a higher price 78% of the time. Each series has under 90 days, and week-ahead windows from neighbouring days overlap, so neither pattern can be told from chance. Pooled across series the direction washes out and only "a price is about to move" is left. A person looking at the B300 chart would have believed the hypothesis. The loop tested it on every series and on unseen dates, and dropped it.
 
 The same tables show what did carry direction. A series below its 30-day median stepped up within a week 42% of the time in the search period, against 18% for a series near its median.
 

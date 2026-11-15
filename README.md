@@ -2,6 +2,8 @@
 
 Track 2 (Recursive Self-Improvement by Pacific: An AI Scientist for GPU Value), SF AI Research Hackathon, November 14 to 15, 2026. Direction A, self-improving forecasts.
 
+**An AI researcher that catches its own false discoveries while forecasting GPU prices.**
+
 A research loop that proposes hypotheses about what moves posted GPU rental prices, tests each one on dates it is allowed to see, and keeps a change only if it also improves forecasts on dates it has never seen. It starts from hypotheses we wrote, refines what survives, and then a language model reads the results and writes its own. It forecasts the 0.1, 0.5 and 0.9 quantiles of posted rental medians 1, 3 and 7 days ahead.
 
 ## Result
@@ -16,6 +18,8 @@ Scored once, after the loop stopped, on forecast origins from October 20 to 30, 
 The gain over `drift` is +0.047 skill, with a 90% bootstrap interval of +0.030 to +0.062 (resampling whole origin dates).
 
 The organisers' own `scorer.py`, in frozen mode at their demo cutoff of October 24, 2026 with history truncated at the cutoff, gives +0.303 for this method against +0.242 for `drift` on the 183 posted series that move. On the 17 posted series in the headline tier at that cutoff it gives +0.221 against +0.228: no gain on that small set (51 cells).
+
+**The gate makes the forecasts better; it does not only reject more.** The identical loop with the gate switched off keeps 7 hypotheses, not 3, looks better on the dates it can see (+0.174 against +0.135) and is worse on the untouched dates (+0.228 against +0.251, a difference of 0.023 with a 90% interval of 0.015 to 0.030). Rerun on Modal across 6 random orderings of the hypothesis list, the gated loop won on the lockbox in 6 of 6, by +0.022 skill on average. Those runs also show that our +0.251 is on the favourable end: across orderings the gated loop scored +0.224 to +0.254, always above the drift baseline's +0.204. Details are in the findings.
 
 Of 80 hypotheses tested, 19 improved the development dates. Only 3 of those also improved the unseen gate dates and were kept. The other 16 would have been accepted by a loop without a held-out gate. 13 of the 80 were written by a language model, not by us; none of those survived. The full record is [results/research_log.md](results/research_log.md), and the findings are in [FINDINGS.md](FINDINGS.md).
 
@@ -65,6 +69,8 @@ In the submitted run, three agents made 167 writes and two agents made 29 recall
 
 **The scout** ([gvs/scout.py](gvs/scout.py), Exa). Every search is bounded by published date, so nothing dated after a forecast origin is used, and a result whose text names a later date is dropped because Exa's excerpt comes from its latest crawl (3 of 36 were). The proposer attaches the evidence it read to each hypothesis: the last column of [results/research_log.md](results/research_log.md) links the sources. The sources are listed in [results/exa_evidence.md](results/exa_evidence.md), and they back the long-run argument in the findings. Published files keep each source's headline, link, date and an excerpt of at most 160 characters. One Exa-driven hypothesis could not be tested: weekly counts of price-rise and price-cut articles hit the 25-result cap in every week, so the count carries no signal. It is logged as not testable.
 
+**Parallel ablations on Modal** ([modal_ablation.py](modal_ablation.py), [modal_orderings.py](modal_orderings.py)). The loop is greedy, so one run is one path. To test the central claim we reran the whole loop from an empty log under different acceptance rules and under shuffled orderings of the hypothesis list, one Modal container per run, 25 runs at once, each scoring its own final method. `modal run modal_orderings.py` reproduces it; results are in [results/ablation/](results/ablation/).
+
 **The report** ([gvs/report.py](gvs/report.py)) scores the final method once on the lockbox against the organisers' `baselines.py`, run unchanged on the same cells.
 
 ## Files
@@ -78,6 +84,7 @@ In the submitted run, three agents made 167 writes and two agents made 29 recall
 | `gvs/experiments.py` | Direct tests of each market-state hypothesis |
 | `gvs/frozen_check.py` | Our forecast from a truncated history, for the organisers' frozen scorer |
 | `gvs/llm_proposer.py` | The language-model proposer: prompt, typed edit grammar, validation, response cache |
+| `gvs/ablation.py`, `modal_ablation.py`, `modal_orderings.py` | The gate-versus-no-gate comparison and its parallel runs on Modal |
 | `gvs/memory.py` | Shared agent memory on past.dev, with a local fallback and a full call log |
 | `gvs/scout.py` | Dated web search through Exa, cached on disk, with the date-leak filter |
 | `gvs/check_integrations.py` | A three-agent write and cross-read check against the real past.dev API |
@@ -94,8 +101,9 @@ In the submitted run, three agents made 167 writes and two agents made 29 recall
 - **Posted prices are asks, not transactions.** Every number here is about what providers list.
 - **AWS spot series are not forecast.** The brief says they have no November truth and are not scored on Sunday.
 - **The event forecast is unscored.** Truth for November 7, 9 and 13 was not available to us.
-- **Modal is not used.** Everything runs on a laptop CPU.
+- **The result depends on the order of the hypothesis list.** The loop is greedy. The submitted run used the order we wrote the hypotheses in and scored +0.251 on the lockbox; shuffled orderings scored lower, though always above the baseline and above the no-gate loop.
+- **The ablation runs looked at the lockbox again.** They score methods on the lockbox dates to compare acceptance rules. Nothing from them was fed back into the submitted method, which was fixed before they ran.
 
 ## Credits
 
-Data: Pacific Machines (2026), gpu-price-pack v0.1.1-handover, data cutoff 6 November 2026, CC BY 4.0 on the compilation; see [ATTRIBUTION.md](ATTRIBUTION.md) for every source. Baselines and scorer: the pack's starter kit, run unchanged. Libraries: pandas, numpy, duckdb. Services: Exa (web search), past.dev (agent memory). Language model for the proposer rounds: Claude Opus 5.5 (Anthropic), called through the `claude` command line; any OpenAI-compatible endpoint can be used instead by setting `LLM_BASE_URL`, `LLM_API_KEY` and `LLM_MODEL`. Code written during the event with an AI coding agent (Claude Code).
+Data: Pacific Machines (2026), gpu-price-pack v0.1.1-handover, data cutoff 6 November 2026, CC BY 4.0 on the compilation; see [ATTRIBUTION.md](ATTRIBUTION.md) for every source. Baselines and scorer: the pack's starter kit, run unchanged. Libraries: pandas, numpy, duckdb. Services: Exa (web search), past.dev (agent memory), Modal (parallel ablation runs). Language model for the proposer rounds: Claude Opus 5.5 (Anthropic), called through the `claude` command line; any OpenAI-compatible endpoint can be used instead by setting `LLM_BASE_URL`, `LLM_API_KEY` and `LLM_MODEL`. Code written during the event with an AI coding agent (Claude Code).

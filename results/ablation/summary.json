@@ -1,0 +1,40 @@
+{
+ "rows": [
+  {
+   "rule": "dev_only",
+   "label": "No gate: keep anything that improves the development dates",
+   "hypotheses_tested": 76,
+   "kept": 7,
+   "dev_skill": 0.1741,
+   "gate_skill": 0.1796,
+   "lockbox_skill": 0.2282,
+   "lockbox_coverage": 0.801
+  },
+  {
+   "rule": "gate_any_gain",
+   "label": "Gate, any gain on unseen dates",
+   "hypotheses_tested": 71,
+   "kept": 3,
+   "dev_skill": 0.1347,
+   "gate_skill": 0.2045,
+   "lockbox_skill": 0.2509,
+   "lockbox_coverage": 0.814
+  },
+  {
+   "rule": "gate_p90",
+   "label": "Gate, 90% confidence (the submitted rule)",
+   "hypotheses_tested": 71,
+   "kept": 3,
+   "dev_skill": 0.1347,
+   "gate_skill": 0.2045,
+   "lockbox_skill": 0.2509,
+   "lockbox_coverage": 0.814
+  }
+ ],
+ "gate_p90_minus_dev_only_on_lockbox": {
+  "gain": 0.0227,
+  "p_positive": 1.0,
+  "lo": 0.0146,
+  "hi": 0.0302
+ }
+}

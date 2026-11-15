@@ -155,7 +155,8 @@ def config_key(cfg: Config) -> str:
 
 
 def run(series_csv: str, catalog_csv: str, log_path: str, max_rounds: int = 3, news_csv: str | None = None,
-        memory=None, evidence: list[dict] | None = None, llm_rounds: int = 0, llm_only: bool = False) -> Config:
+        memory=None, evidence: list[dict] | None = None, llm_rounds: int = 0, llm_only: bool = False,
+        accept_rule: str = "gate", gate_p: float = GATE_P, order_seed: int | None = None) -> Config:
     """`memory` is the agents' shared store (gvs.memory.SharedMemory); `evidence` is what the scout found on the web."""
     panel = Panel(series_csv, catalog_csv, news_csv)
     if memory is not None:
@@ -234,7 +235,7 @@ def run(series_csv: str, catalog_csv: str, log_path: str, max_rounds: int = 3, n
             return False
         g = paired_gain(gate_new, gate_old)
         entry.update(gate_gain=g["gain"], gate_p=g["p_positive"])
-        if not (g["gain"] > 0 and g["p_positive"] >= GATE_P):
+        if accept_rule == "gate" and not (g["gain"] > 0 and g["p_positive"] >= gate_p):
             record({**entry, "verdict": "rejected at the gate"})
             return False
         record({**entry, "verdict": "kept"})
@@ -255,7 +256,11 @@ def run(series_csv: str, catalog_csv: str, log_path: str, max_rounds: int = 3, n
         kept = {h["data"].get("family") for h in hits if h.get("data", {}).get("verdict") == "kept"}
         return failed - kept - {None}
 
-    for hyp in ([] if llm_only else seed_hypotheses()):
+    seeds = [] if llm_only else seed_hypotheses()
+    if order_seed is not None:  # the loop is greedy, so the order of the seed list is itself a choice worth varying
+        import random
+        random.Random(order_seed).shuffle(seeds)
+    for hyp in seeds:
         test({**hyp, "family": SEED_FAMILY[hyp["id"]]}, hyp["id"])
     classes = sorted(set(panel.instrument_class[i] for o in origin_range(GATE)[::5] for i in panel.moving_at(o)))
     skipped = []
