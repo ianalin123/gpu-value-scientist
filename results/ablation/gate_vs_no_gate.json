@@ -11,11 +11,11 @@
   "no_gate_kept": 7
  },
  "orderings": {
-  "pairs": 18,
-  "gate_wins": 17,
-  "mean_difference": 0.0229,
-  "gate_mean": 0.2426,
-  "no_gate_mean": 0.2197,
+  "pairs": 33,
+  "gate_wins": 31,
+  "mean_difference": 0.0238,
+  "gate_mean": 0.245,
+  "no_gate_mean": 0.2212,
   "gate_range": [
    0.2238,
    0.2537

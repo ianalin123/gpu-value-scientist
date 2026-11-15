@@ -79,7 +79,7 @@ We reran the identical loop with the gate switched off, so that any hypothesis t
 
 Without the gate the loop kept more than twice as many ideas and looked better on the dates it could see. On the untouched dates it was worse by 0.023 skill (90% interval 0.015 to 0.030). Among the four extra ideas it kept was self-grading with a 90-day window, the largest false win in the log.
 
-**The same comparison across 18 orderings of the hypothesis list, run in parallel on Modal.** The loop is greedy, so one run is one path. We shuffled the seed list 18 ways and ran the gated loop and the no-gate loop on each, one container per run, each scoring its own final method on the lockbox.
+**The same comparison across 33 orderings of the hypothesis list, run in parallel on Modal.** The loop is greedy, so one run is one path. We shuffled the seed list 33 ways and ran the gated loop and the no-gate loop on each, one container per run, each scoring its own final method on the lockbox.
 
 | Ordering | Gate: kept | Gate: dev | Gate: lockbox | No gate: kept | No gate: dev | No gate: lockbox | Difference |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -93,18 +93,33 @@ Without the gate the loop kept more than twice as many ideas and looked better o
 | 7 | 2 | +0.090 | +0.224 | 10 | +0.148 | +0.212 | +0.012 |
 | 8 | 4 | +0.135 | +0.241 | 10 | +0.172 | +0.232 | +0.010 |
 | 9 | 4 | +0.136 | +0.254 | 8 | +0.140 | +0.224 | +0.030 |
+| 10 | 3 | +0.136 | +0.254 | 9 | +0.153 | +0.231 | +0.023 |
 | 11 | 4 | +0.136 | +0.254 | 10 | +0.168 | +0.223 | +0.031 |
 | 12 | 4 | +0.136 | +0.254 | 6 | +0.116 | +0.213 | +0.041 |
+| 13 | 3 | +0.135 | +0.251 | 4 | +0.120 | +0.215 | +0.036 |
 | 14 | 3 | +0.136 | +0.254 | 6 | +0.116 | +0.213 | +0.041 |
+| 15 | 4 | +0.136 | +0.254 | 9 | +0.175 | +0.233 | +0.021 |
+| 16 | 3 | +0.136 | +0.254 | 4 | +0.120 | +0.215 | +0.039 |
+| 17 | 3 | +0.136 | +0.254 | 9 | +0.177 | +0.231 | +0.022 |
+| 18 | 3 | +0.135 | +0.241 | 9 | +0.165 | +0.243 | -0.002 |
 | 19 | 2 | +0.090 | +0.224 | 7 | +0.142 | +0.243 | -0.019 |
+| 20 | 4 | +0.131 | +0.236 | 6 | +0.157 | +0.214 | +0.022 |
 | 21 | 3 | +0.136 | +0.254 | 9 | +0.170 | +0.233 | +0.020 |
 | 22 | 4 | +0.136 | +0.254 | 6 | +0.129 | +0.203 | +0.051 |
+| 23 | 2 | +0.090 | +0.224 | 7 | +0.131 | +0.205 | +0.019 |
+| 24 | 4 | +0.136 | +0.254 | 9 | +0.160 | +0.230 | +0.024 |
+| 25 | 3 | +0.135 | +0.241 | 4 | +0.120 | +0.215 | +0.026 |
+| 26 | 4 | +0.135 | +0.241 | 7 | +0.161 | +0.221 | +0.020 |
+| 27 | 3 | +0.136 | +0.254 | 7 | +0.174 | +0.231 | +0.022 |
 | 28 | 2 | +0.090 | +0.224 | 6 | +0.129 | +0.203 | +0.021 |
+| 29 | 3 | +0.136 | +0.254 | 8 | +0.174 | +0.231 | +0.023 |
+| 30 | 3 | +0.136 | +0.254 | 10 | +0.172 | +0.225 | +0.029 |
 | 31 | 2 | +0.090 | +0.224 | 6 | +0.126 | +0.210 | +0.014 |
+| 32 | 4 | +0.136 | +0.254 | 6 | +0.119 | +0.204 | +0.050 |
 
-The gated loop won on the lockbox in 17 of 18 orderings, by +0.023 skill on average (+0.243 against +0.220). The no-gate loop kept 7.7 hypotheses on average against 3.2.
+The gated loop won on the lockbox in 31 of 33 orderings, by +0.024 skill on average (+0.245 against +0.221). The no-gate loop kept 7.5 hypotheses on average against 3.2.
 
-**What this also shows about our own result.** Across these orderings the gated loop's lockbox skill ranged from +0.224 to +0.254. The submitted run, in the order we happened to write the hypotheses, scored +0.251, near the top of that range. So the fair statement is: the gate reliably beats no gate, the gated loop reliably beats the drift baseline (+0.204), and the size of the gain depends on the path, with +0.251 on the favourable end.
+**What this also shows about our own result.** Across these orderings the gated loop's lockbox skill ranged from +0.224 to +0.254. The submitted run, in the order we happened to write the hypotheses, scored +0.251, at the top of that range. So the fair statement is: the gate reliably beats no gate, the gated loop reliably beats the drift baseline (+0.204), and the size of the gain depends on the path, with +0.251 on the favourable end.
 
 ## Why the gain is modest, and where the error is
 
