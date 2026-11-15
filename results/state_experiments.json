@@ -1,0 +1,326 @@
+{
+  "search_period": [
+    {
+      "feature": "deviation",
+      "state": "below 30-day median",
+      "n": 901,
+      "p_up_7d": 0.422,
+      "p_down_7d": 0.131,
+      "mean_log_change": 0.0345
+    },
+    {
+      "feature": "deviation",
+      "state": "near 30-day median",
+      "n": 5144,
+      "p_up_7d": 0.175,
+      "p_down_7d": 0.094,
+      "mean_log_change": 0.0079
+    },
+    {
+      "feature": "deviation",
+      "state": "above 30-day median",
+      "n": 2857,
+      "p_up_7d": 0.359,
+      "p_down_7d": 0.18,
+      "mean_log_change": 0.0083
+    },
+    {
+      "feature": "last_dir",
+      "state": "last step was down",
+      "n": 2990,
+      "p_up_7d": 0.262,
+      "p_down_7d": 0.134,
+      "mean_log_change": 0.0135
+    },
+    {
+      "feature": "last_dir",
+      "state": "last step was up",
+      "n": 5912,
+      "p_up_7d": 0.258,
+      "p_down_7d": 0.12,
+      "mean_log_change": 0.0093
+    },
+    {
+      "feature": "newgen_lead",
+      "state": "new-gen rate cards fell",
+      "n": 1155,
+      "p_up_7d": 0.222,
+      "p_down_7d": 0.196,
+      "mean_log_change": 0.002
+    },
+    {
+      "feature": "newgen_lead",
+      "state": "new-gen flat",
+      "n": 3213,
+      "p_up_7d": 0.214,
+      "p_down_7d": 0.055,
+      "mean_log_change": 0.0165
+    },
+    {
+      "feature": "newgen_lead",
+      "state": "new-gen rate cards rose",
+      "n": 4534,
+      "p_up_7d": 0.3,
+      "p_down_7d": 0.157,
+      "mean_log_change": 0.0088
+    },
+    {
+      "feature": "offer_trend",
+      "state": "offer count falling",
+      "n": 1608,
+      "p_up_7d": 0.251,
+      "p_down_7d": 0.104,
+      "mean_log_change": 0.0161
+    },
+    {
+      "feature": "offer_trend",
+      "state": "offer count flat",
+      "n": 4951,
+      "p_up_7d": 0.282,
+      "p_down_7d": 0.144,
+      "mean_log_change": 0.01
+    },
+    {
+      "feature": "offer_trend",
+      "state": "offer count rising",
+      "n": 2343,
+      "p_up_7d": 0.216,
+      "p_down_7d": 0.101,
+      "mean_log_change": 0.0085
+    },
+    {
+      "feature": "peer_lead",
+      "state": "same GPU fell elsewhere",
+      "n": 466,
+      "p_up_7d": 0.131,
+      "p_down_7d": 0.122,
+      "mean_log_change": -0.0092
+    },
+    {
+      "feature": "peer_lead",
+      "state": "no peer move",
+      "n": 7431,
+      "p_up_7d": 0.276,
+      "p_down_7d": 0.126,
+      "mean_log_change": 0.0127
+    },
+    {
+      "feature": "peer_lead",
+      "state": "same GPU rose elsewhere",
+      "n": 1005,
+      "p_up_7d": 0.192,
+      "p_down_7d": 0.122,
+      "mean_log_change": 0.0054
+    },
+    {
+      "feature": "provider_change",
+      "state": "a provider left",
+      "n": 88,
+      "p_up_7d": 0.33,
+      "p_down_7d": 0.045,
+      "mean_log_change": 0.0645
+    },
+    {
+      "feature": "provider_change",
+      "state": "same providers",
+      "n": 8557,
+      "p_up_7d": 0.257,
+      "p_down_7d": 0.122,
+      "mean_log_change": 0.0107
+    },
+    {
+      "feature": "provider_change",
+      "state": "a provider joined",
+      "n": 257,
+      "p_up_7d": 0.315,
+      "p_down_7d": 0.261,
+      "mean_log_change": -0.0083
+    },
+    {
+      "feature": "since_change",
+      "state": "changed in last 2 days",
+      "n": 2888,
+      "p_up_7d": 0.528,
+      "p_down_7d": 0.236,
+      "mean_log_change": 0.0205
+    },
+    {
+      "feature": "since_change",
+      "state": "changed 3 to 13 days ago",
+      "n": 2208,
+      "p_up_7d": 0.197,
+      "p_down_7d": 0.12,
+      "mean_log_change": 0.0024
+    },
+    {
+      "feature": "since_change",
+      "state": "quiet for 14+ days",
+      "n": 3806,
+      "p_up_7d": 0.091,
+      "p_down_7d": 0.044,
+      "mean_log_change": 0.008
+    }
+  ],
+  "lockbox": [
+    {
+      "feature": "deviation",
+      "state": "below 30-day median",
+      "n": 293,
+      "p_up_7d": 0.324,
+      "p_down_7d": 0.3,
+      "mean_log_change": 0.0299
+    },
+    {
+      "feature": "deviation",
+      "state": "near 30-day median",
+      "n": 919,
+      "p_up_7d": 0.172,
+      "p_down_7d": 0.171,
+      "mean_log_change": -0.0223
+    },
+    {
+      "feature": "deviation",
+      "state": "above 30-day median",
+      "n": 669,
+      "p_up_7d": 0.611,
+      "p_down_7d": 0.251,
+      "mean_log_change": 0.0008
+    },
+    {
+      "feature": "last_dir",
+      "state": "last step was down",
+      "n": 785,
+      "p_up_7d": 0.262,
+      "p_down_7d": 0.204,
+      "mean_log_change": 0.0093
+    },
+    {
+      "feature": "last_dir",
+      "state": "last step was up",
+      "n": 1096,
+      "p_up_7d": 0.416,
+      "p_down_7d": 0.231,
+      "mean_log_change": -0.0169
+    },
+    {
+      "feature": "newgen_lead",
+      "state": "new-gen rate cards fell",
+      "n": 445,
+      "p_up_7d": 0.353,
+      "p_down_7d": 0.222,
+      "mean_log_change": -0.0054
+    },
+    {
+      "feature": "newgen_lead",
+      "state": "new-gen flat",
+      "n": 131,
+      "p_up_7d": 0.244,
+      "p_down_7d": 0.305,
+      "mean_log_change": -0.0167
+    },
+    {
+      "feature": "newgen_lead",
+      "state": "new-gen rate cards rose",
+      "n": 1305,
+      "p_up_7d": 0.362,
+      "p_down_7d": 0.21,
+      "mean_log_change": -0.0051
+    },
+    {
+      "feature": "offer_trend",
+      "state": "offer count falling",
+      "n": 301,
+      "p_up_7d": 0.379,
+      "p_down_7d": 0.299,
+      "mean_log_change": -0.0267
+    },
+    {
+      "feature": "offer_trend",
+      "state": "offer count flat",
+      "n": 1227,
+      "p_up_7d": 0.357,
+      "p_down_7d": 0.191,
+      "mean_log_change": -0.0011
+    },
+    {
+      "feature": "offer_trend",
+      "state": "offer count rising",
+      "n": 353,
+      "p_up_7d": 0.312,
+      "p_down_7d": 0.252,
+      "mean_log_change": -0.0051
+    },
+    {
+      "feature": "peer_lead",
+      "state": "same GPU fell elsewhere",
+      "n": 145,
+      "p_up_7d": 0.152,
+      "p_down_7d": 0.172,
+      "mean_log_change": -0.0429
+    },
+    {
+      "feature": "peer_lead",
+      "state": "no peer move",
+      "n": 1421,
+      "p_up_7d": 0.407,
+      "p_down_7d": 0.233,
+      "mean_log_change": -0.0001
+    },
+    {
+      "feature": "peer_lead",
+      "state": "same GPU rose elsewhere",
+      "n": 315,
+      "p_up_7d": 0.197,
+      "p_down_7d": 0.181,
+      "mean_log_change": -0.0156
+    },
+    {
+      "feature": "provider_change",
+      "state": "a provider left",
+      "n": 106,
+      "p_up_7d": 0.321,
+      "p_down_7d": 0.387,
+      "mean_log_change": -0.0082
+    },
+    {
+      "feature": "provider_change",
+      "state": "same providers",
+      "n": 1683,
+      "p_up_7d": 0.357,
+      "p_down_7d": 0.206,
+      "mean_log_change": -0.0065
+    },
+    {
+      "feature": "provider_change",
+      "state": "a provider joined",
+      "n": 92,
+      "p_up_7d": 0.293,
+      "p_down_7d": 0.272,
+      "mean_log_change": 0.0053
+    },
+    {
+      "feature": "since_change",
+      "state": "changed in last 2 days",
+      "n": 952,
+      "p_up_7d": 0.574,
+      "p_down_7d": 0.297,
+      "mean_log_change": 0.0063
+    },
+    {
+      "feature": "since_change",
+      "state": "changed 3 to 13 days ago",
+      "n": 374,
+      "p_up_7d": 0.209,
+      "p_down_7d": 0.241,
+      "mean_log_change": -0.0251
+    },
+    {
+      "feature": "since_change",
+      "state": "quiet for 14+ days",
+      "n": 555,
+      "p_up_7d": 0.068,
+      "p_down_7d": 0.072,
+      "mean_log_change": -0.0141
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+== search_period: P(step within 7 days | state), posted series that move
+        feature                    state    n  p_up_7d  p_down_7d  mean_log_change
+      deviation      below 30-day median  901    0.422      0.131           0.0345
+      deviation       near 30-day median 5144    0.175      0.094           0.0079
+      deviation      above 30-day median 2857    0.359      0.180           0.0083
+       last_dir       last step was down 2990    0.262      0.134           0.0135
+       last_dir         last step was up 5912    0.258      0.120           0.0093
+    newgen_lead  new-gen rate cards fell 1155    0.222      0.196           0.0020
+    newgen_lead             new-gen flat 3213    0.214      0.055           0.0165
+    newgen_lead  new-gen rate cards rose 4534    0.300      0.157           0.0088
+    offer_trend      offer count falling 1608    0.251      0.104           0.0161
+    offer_trend         offer count flat 4951    0.282      0.144           0.0100
+    offer_trend       offer count rising 2343    0.216      0.101           0.0085
+      peer_lead  same GPU fell elsewhere  466    0.131      0.122          -0.0092
+      peer_lead             no peer move 7431    0.276      0.126           0.0127
+      peer_lead  same GPU rose elsewhere 1005    0.192      0.122           0.0054
+provider_change          a provider left   88    0.330      0.045           0.0645
+provider_change           same providers 8557    0.257      0.122           0.0107
+provider_change        a provider joined  257    0.315      0.261          -0.0083
+   since_change   changed in last 2 days 2888    0.528      0.236           0.0205
+   since_change changed 3 to 13 days ago 2208    0.197      0.120           0.0024
+   since_change       quiet for 14+ days 3806    0.091      0.044           0.0080
+== lockbox: P(step within 7 days | state), posted series that move
+        feature                    state    n  p_up_7d  p_down_7d  mean_log_change
+      deviation      below 30-day median  293    0.324      0.300           0.0299
+      deviation       near 30-day median  919    0.172      0.171          -0.0223
+      deviation      above 30-day median  669    0.611      0.251           0.0008
+       last_dir       last step was down  785    0.262      0.204           0.0093
+       last_dir         last step was up 1096    0.416      0.231          -0.0169
+    newgen_lead  new-gen rate cards fell  445    0.353      0.222          -0.0054
+    newgen_lead             new-gen flat  131    0.244      0.305          -0.0167
+    newgen_lead  new-gen rate cards rose 1305    0.362      0.210          -0.0051
+    offer_trend      offer count falling  301    0.379      0.299          -0.0267
+    offer_trend         offer count flat 1227    0.357      0.191          -0.0011
+    offer_trend       offer count rising  353    0.312      0.252          -0.0051
+      peer_lead  same GPU fell elsewhere  145    0.152      0.172          -0.0429
+      peer_lead             no peer move 1421    0.407      0.233          -0.0001
+      peer_lead  same GPU rose elsewhere  315    0.197      0.181          -0.0156
+provider_change          a provider left  106    0.321      0.387          -0.0082
+provider_change           same providers 1683    0.357      0.206          -0.0065
+provider_change        a provider joined   92    0.293      0.272           0.0053
+   since_change   changed in last 2 days  952    0.574      0.297           0.0063
+   since_change changed 3 to 13 days ago  374    0.209      0.241          -0.0251
+   since_change       quiet for 14+ days  555    0.068      0.072          -0.0141

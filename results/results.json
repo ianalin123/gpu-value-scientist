@@ -1,0 +1,207 @@
+{
+  "final_method": {
+    "adaptive_rate": 0.0,
+    "center": "drift",
+    "condition": [
+      [
+        "deviation",
+        0.3
+      ],
+      [
+        "last_dir",
+        0.3
+      ]
+    ],
+    "halflife_days": null,
+    "lookback_days": null,
+    "min_samples": 20.0,
+    "pool": "class",
+    "pool_weight": 20.0,
+    "self_gate_days": null,
+    "self_gate_min": 9,
+    "self_gate_start_closed": false,
+    "step_quantiles": false,
+    "tail_scale": [
+      1.0,
+      1.0
+    ],
+    "width_scale": []
+  },
+  "splits": {
+    "dev": [
+      "2026-04-01",
+      "2026-09-16"
+    ],
+    "gate": [
+      "2026-09-24",
+      "2026-10-12"
+    ],
+    "lockbox": [
+      "2026-10-20",
+      "2026-10-30"
+    ]
+  },
+  "sets": {
+    "dev": {
+      "official_drift": {
+        "cells": 17254,
+        "pooled_skill": 0.0529,
+        "coverage_q10_q90": 0.88
+      },
+      "our_starting_point": {
+        "cells": 17254,
+        "pooled_skill": 0.031,
+        "coverage_q10_q90": 0.886
+      },
+      "final_method": {
+        "cells": 17254,
+        "pooled_skill": 0.1347,
+        "coverage_q10_q90": 0.878
+      },
+      "gain_over_official_drift": {
+        "gain": 0.0818,
+        "p_positive": 1.0,
+        "lo": 0.0653,
+        "hi": 0.0974
+      }
+    },
+    "gate": {
+      "official_drift": {
+        "cells": 7313,
+        "pooled_skill": 0.1631,
+        "coverage_q10_q90": 0.72
+      },
+      "our_starting_point": {
+        "cells": 7313,
+        "pooled_skill": 0.1587,
+        "coverage_q10_q90": 0.731
+      },
+      "final_method": {
+        "cells": 7313,
+        "pooled_skill": 0.2045,
+        "coverage_q10_q90": 0.734
+      },
+      "gain_over_official_drift": {
+        "gain": 0.0414,
+        "p_positive": 1.0,
+        "lo": 0.024,
+        "hi": 0.0652
+      }
+    },
+    "lockbox": {
+      "official_drift": {
+        "cells": 5451,
+        "pooled_skill": 0.2041,
+        "coverage_q10_q90": 0.78
+      },
+      "our_starting_point": {
+        "cells": 5451,
+        "pooled_skill": 0.1967,
+        "coverage_q10_q90": 0.79
+      },
+      "final_method": {
+        "cells": 5451,
+        "pooled_skill": 0.2509,
+        "coverage_q10_q90": 0.814
+      },
+      "gain_over_official_drift": {
+        "gain": 0.0467,
+        "p_positive": 1.0,
+        "lo": 0.0298,
+        "hi": 0.0624
+      }
+    }
+  },
+  "lockbox_by_instrument_class": [
+    {
+      "instrument_class": "aggregator_cheapest",
+      "cells": 432,
+      "share_of_last_value_loss": 0.035,
+      "moved": 0.15,
+      "drift_skill": 0.326,
+      "final_skill": 0.484
+    },
+    {
+      "instrument_class": "hyperscaler_list",
+      "cells": 382,
+      "share_of_last_value_loss": 0.011,
+      "moved": 0.065,
+      "drift_skill": -0.523,
+      "final_skill": -0.141
+    },
+    {
+      "instrument_class": "hyperscaler_spot",
+      "cells": 1069,
+      "share_of_last_value_loss": 0.181,
+      "moved": 0.617,
+      "drift_skill": 0.221,
+      "final_skill": 0.219
+    },
+    {
+      "instrument_class": "marketplace_ask",
+      "cells": 834,
+      "share_of_last_value_loss": 0.404,
+      "moved": 0.596,
+      "drift_skill": 0.203,
+      "final_skill": 0.27
+    },
+    {
+      "instrument_class": "neocloud_rate_card",
+      "cells": 1851,
+      "share_of_last_value_loss": 0.299,
+      "moved": 0.381,
+      "drift_skill": 0.157,
+      "final_skill": 0.189
+    },
+    {
+      "instrument_class": "neocloud_spot",
+      "cells": 883,
+      "share_of_last_value_loss": 0.069,
+      "moved": 0.715,
+      "drift_skill": 0.43,
+      "final_skill": 0.434
+    }
+  ],
+  "lockbox_by_horizon": [
+    {
+      "h": 1,
+      "drift_skill": 0.205,
+      "final_skill": 0.282
+    },
+    {
+      "h": 3,
+      "drift_skill": 0.249,
+      "final_skill": 0.256
+    },
+    {
+      "h": 7,
+      "drift_skill": 0.179,
+      "final_skill": 0.237
+    }
+  ],
+  "lockbox_on_event_headline_series": {
+    "note": "the 37 posted series that pass the starter kit's headline gates on 2026-11-06; membership uses data after the lockbox, so this row is descriptive",
+    "official_drift": {
+      "cells": 1080,
+      "pooled_skill": 0.072,
+      "coverage_q10_q90": 0.676
+    },
+    "final_method": {
+      "cells": 1080,
+      "pooled_skill": 0.0967,
+      "coverage_q10_q90": 0.694
+    },
+    "gain_over_official_drift": {
+      "gain": 0.0248,
+      "p_positive": 0.9825,
+      "lo": 0.0061,
+      "hi": 0.045
+    }
+  },
+  "event_forecast": {
+    "file": "forecast_2026-11-06.csv",
+    "rows": 1776,
+    "series": 592,
+    "series_with_a_non_flat_forecast": 174
+  }
+}
