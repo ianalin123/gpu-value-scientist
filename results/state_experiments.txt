@@ -1,5 +1,8 @@
 == search_period: P(step within 7 days | state), posted series that move
         feature                    state    n  p_up_7d  p_down_7d  mean_log_change
+    class_trend   class fell over 7 days 1190    0.305      0.231           0.0102
+    class_trend   class flat over 7 days 4761    0.199      0.092           0.0117
+    class_trend   class rose over 7 days 2951    0.336      0.136           0.0093
       deviation      below 30-day median  901    0.422      0.131           0.0345
       deviation       near 30-day median 5144    0.175      0.094           0.0079
       deviation      above 30-day median 2857    0.359      0.180           0.0083
@@ -11,6 +14,9 @@
     offer_trend      offer count falling 1608    0.251      0.104           0.0161
     offer_trend         offer count flat 4951    0.282      0.144           0.0100
     offer_trend       offer count rising 2343    0.216      0.101           0.0085
+      own_trend        fell over 14 days 1001    0.398      0.166           0.0285
+      own_trend        flat over 14 days 4984    0.163      0.085           0.0089
+      own_trend        rose over 14 days 2917    0.376      0.179           0.0076
       peer_lead  same GPU fell elsewhere  466    0.131      0.122          -0.0092
       peer_lead             no peer move 7431    0.276      0.126           0.0127
       peer_lead  same GPU rose elsewhere 1005    0.192      0.122           0.0054
@@ -22,6 +28,9 @@ provider_change        a provider joined  257    0.315      0.261          -0.00
    since_change       quiet for 14+ days 3806    0.091      0.044           0.0080
 == lockbox: P(step within 7 days | state), posted series that move
         feature                    state    n  p_up_7d  p_down_7d  mean_log_change
+    class_trend   class fell over 7 days  405    0.257      0.264          -0.0058
+    class_trend   class flat over 7 days  535    0.271      0.219          -0.0076
+    class_trend   class rose over 7 days  941    0.439      0.201          -0.0051
       deviation      below 30-day median  293    0.324      0.300           0.0299
       deviation       near 30-day median  919    0.172      0.171          -0.0223
       deviation      above 30-day median  669    0.611      0.251           0.0008
@@ -33,6 +42,9 @@ provider_change        a provider joined  257    0.315      0.261          -0.00
     offer_trend      offer count falling  301    0.379      0.299          -0.0267
     offer_trend         offer count flat 1227    0.357      0.191          -0.0011
     offer_trend       offer count rising  353    0.312      0.252          -0.0051
+      own_trend        fell over 14 days  343    0.324      0.341           0.0216
+      own_trend        flat over 14 days  835    0.163      0.135          -0.0213
+      own_trend        rose over 14 days  703    0.590      0.260          -0.0012
       peer_lead  same GPU fell elsewhere  145    0.152      0.172          -0.0429
       peer_lead             no peer move 1421    0.407      0.233          -0.0001
       peer_lead  same GPU rose elsewhere  315    0.197      0.181          -0.0156

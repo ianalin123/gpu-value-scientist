@@ -8,7 +8,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from gvs.core import STATE_FEATURES, Panel, day_index
+from gvs.core import Panel, day_index
 from gvs.scientist import LOCKBOX, START
 
 LABELS = {
@@ -19,6 +19,9 @@ LABELS = {
     "peer_lead": {-1: "same GPU fell elsewhere", 0: "no peer move", 1: "same GPU rose elsewhere"},
     "newgen_lead": {-1: "new-gen rate cards fell", 0: "new-gen flat", 1: "new-gen rate cards rose"},
     "provider_change": {-1: "a provider left", 0: "same providers", 1: "a provider joined"},
+    "own_trend": {-1: "fell over 14 days", 0: "flat over 14 days", 1: "rose over 14 days"},
+    "class_trend": {-1: "class fell over 7 days", 0: "class flat over 7 days", 1: "class rose over 7 days"},
+    "news": {-1: "fewer price-rise articles than usual", 0: "usual news mix", 1: "more price-rise articles than usual"},
 }
 
 
@@ -28,7 +31,7 @@ def step_table(panel: Panel, first: str, last: str, h: int = 7) -> list[dict]:
         ids = panel.moving_at(day)
         y = panel.log_change[h][ids, day]
         ok = ~np.isnan(y)
-        for f in STATE_FEATURES:
+        for f in panel.state:
             rows.append(pd.DataFrame({"feature": f, "state": panel.state[f][ids, day][ok], "y": y[ok]}))
     df = pd.concat(rows)
     df["up"], df["down"] = df.y > 1e-9, df.y < -1e-9
@@ -44,8 +47,9 @@ if __name__ == "__main__":
     ap.add_argument("--series", required=True)
     ap.add_argument("--catalog", required=True)
     ap.add_argument("--out", default="out/state_experiments.json")
+    ap.add_argument("--news")
     args = ap.parse_args()
-    panel = Panel(args.series, args.catalog)
+    panel = Panel(args.series, args.catalog, args.news)
     result = {"search_period": step_table(panel, START, "2026-10-12"), "lockbox": step_table(panel, *LOCKBOX)}
     json.dump(result, open(args.out, "w"), indent=2)
     for period, rows in result.items():

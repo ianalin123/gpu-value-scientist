@@ -1,6 +1,30 @@
 {
   "search_period": [
     {
+      "feature": "class_trend",
+      "state": "class fell over 7 days",
+      "n": 1190,
+      "p_up_7d": 0.305,
+      "p_down_7d": 0.231,
+      "mean_log_change": 0.0102
+    },
+    {
+      "feature": "class_trend",
+      "state": "class flat over 7 days",
+      "n": 4761,
+      "p_up_7d": 0.199,
+      "p_down_7d": 0.092,
+      "mean_log_change": 0.0117
+    },
+    {
+      "feature": "class_trend",
+      "state": "class rose over 7 days",
+      "n": 2951,
+      "p_up_7d": 0.336,
+      "p_down_7d": 0.136,
+      "mean_log_change": 0.0093
+    },
+    {
       "feature": "deviation",
       "state": "below 30-day median",
       "n": 901,
@@ -89,6 +113,30 @@
       "mean_log_change": 0.0085
     },
     {
+      "feature": "own_trend",
+      "state": "fell over 14 days",
+      "n": 1001,
+      "p_up_7d": 0.398,
+      "p_down_7d": 0.166,
+      "mean_log_change": 0.0285
+    },
+    {
+      "feature": "own_trend",
+      "state": "flat over 14 days",
+      "n": 4984,
+      "p_up_7d": 0.163,
+      "p_down_7d": 0.085,
+      "mean_log_change": 0.0089
+    },
+    {
+      "feature": "own_trend",
+      "state": "rose over 14 days",
+      "n": 2917,
+      "p_up_7d": 0.376,
+      "p_down_7d": 0.179,
+      "mean_log_change": 0.0076
+    },
+    {
       "feature": "peer_lead",
       "state": "same GPU fell elsewhere",
       "n": 466,
@@ -162,6 +210,30 @@
     }
   ],
   "lockbox": [
+    {
+      "feature": "class_trend",
+      "state": "class fell over 7 days",
+      "n": 405,
+      "p_up_7d": 0.257,
+      "p_down_7d": 0.264,
+      "mean_log_change": -0.0058
+    },
+    {
+      "feature": "class_trend",
+      "state": "class flat over 7 days",
+      "n": 535,
+      "p_up_7d": 0.271,
+      "p_down_7d": 0.219,
+      "mean_log_change": -0.0076
+    },
+    {
+      "feature": "class_trend",
+      "state": "class rose over 7 days",
+      "n": 941,
+      "p_up_7d": 0.439,
+      "p_down_7d": 0.201,
+      "mean_log_change": -0.0051
+    },
     {
       "feature": "deviation",
       "state": "below 30-day median",
@@ -249,6 +321,30 @@
       "p_up_7d": 0.312,
       "p_down_7d": 0.252,
       "mean_log_change": -0.0051
+    },
+    {
+      "feature": "own_trend",
+      "state": "fell over 14 days",
+      "n": 343,
+      "p_up_7d": 0.324,
+      "p_down_7d": 0.341,
+      "mean_log_change": 0.0216
+    },
+    {
+      "feature": "own_trend",
+      "state": "flat over 14 days",
+      "n": 835,
+      "p_up_7d": 0.163,
+      "p_down_7d": 0.135,
+      "mean_log_change": -0.0213
+    },
+    {
+      "feature": "own_trend",
+      "state": "rose over 14 days",
+      "n": 703,
+      "p_up_7d": 0.59,
+      "p_down_7d": 0.26,
+      "mean_log_change": -0.0012
     },
     {
       "feature": "peer_lead",

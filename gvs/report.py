@@ -11,7 +11,7 @@ import sys
 import numpy as np
 import pandas as pd
 
-from gvs.core import (HORIZONS, Config, Panel, day_index, day_label, forecast_log_quantiles, paired_gain,
+from gvs.core import (HORIZONS, Config, Panel, day_index, day_label, forecast_quantiles, paired_gain,
                       pinball_cell, pooled_skill)
 from gvs.scientist import DEV, GATE, LOCKBOX, config_from_json, evaluate, in_span
 
@@ -59,9 +59,8 @@ def forecast_at(panel: Panel, cfg: Config, origin: int) -> pd.DataFrame:
         if np.isnan(last):
             continue
         for h in HORIZONS:
-            a = forecast_log_quantiles(panel, cfg, i, origin, h) if i in moving else np.zeros(3)
-            q = last * np.exp(a)
-            note = "analog_forecast" if i in moving and (a != 0).any() else "flat_last_value"
+            q = forecast_quantiles(panel, cfg, i, origin, h) if i in moving else np.full(3, last)
+            note = "flat_last_value" if np.allclose(q, last) else "analog_forecast"
             rows.append((sid, day_label(origin), h, q[0], q[1], q[2], day_label(origin + h), note))
     return pd.DataFrame(rows, columns=["series_id", "origin_date", "horizon_days", "q10", "q50", "q90", "target_date", "method_note"])
 

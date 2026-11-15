@@ -9,7 +9,7 @@ Targets are the daily medians of posted rental offers in `daily_statistics.csv`,
 ## Method
 
 1. **Forecaster.** The forecast distribution for a series is the weighted empirical distribution of its own past h-day log changes. Hypotheses change the weights.
-2. **Research loop.** 21 seed hypotheses, then mechanical one-step refinements of whatever has been accepted, repeated until a round yields nothing.
+2. **Research loop.** 26 seed hypotheses, then mechanical one-step refinements of whatever has been accepted, repeated until a round yields nothing. A scout gathers dated web evidence through Exa, and the scout, proposer, experimenter, critic and reporter share one memory on past.dev.
 3. **Gate.** A hypothesis is kept only if it improves pooled skill on the development origins and on gate origins the proposer never sees.
 4. **Lockbox.** Origins from October 20 to 30, 2026 were scored once, after the loop had stopped.
 
@@ -48,7 +48,7 @@ The gain comes from marketplace asks, neocloud rate cards and the aggregator's c
 
 ## What the system learned across iterations
 
-67 hypotheses were tested. 21 improved the development dates. 3 survived the gate. The log is [results/research_log.md](results/research_log.md).
+67 hypotheses were tested. 17 improved the development dates. 3 survived the gate. 4 more refinements were never run, because the proposer read in shared memory that the critic had already rejected those ideas on unseen dates. The log is [results/research_log.md](results/research_log.md).
 
 **Kept.**
 
@@ -61,10 +61,21 @@ The gain comes from marketplace asks, neocloud rate cards and the aggregator's c
 **Rejected, and worth knowing.**
 
 - **Recent data is not better data.** Restricting to the last 60, 90 or 120 days, or down-weighting old changes, hurt every time (for example -0.059 for a 120-day lookback). Prices rose through the autumn, but the older record of how each series steps was still informative.
-- **Self-grading failed out of sample.** Letting the method grade its own last 45 days per series and abstain where it had lost gained +0.033 on the development dates and lost -0.015 at the gate. Every window length tried (21, 30, 60, 90 days) showed the same reversal. A system that trusted its own track record would have adopted this.
+- **Self-grading failed out of sample.** Letting the method grade its own last 45 days per series and abstain where it had lost gained +0.033 on the development dates and lost -0.015 at the gate. In the first run of the loop, before the agents shared memory, windows of 21, 30, 60 and 90 days all showed the same reversal (that log is in this repository's first commit). A system that trusted its own track record would have adopted this.
 - **Narrower intervals for rate cards looked right and were wrong.** Shrinking rate-card intervals by 20% to 40% gained on the development dates and lost at the gate: widths that fit the earlier months were too narrow for the later ones.
 - **Adaptive tails did not help.** Adaptive conformal adjustment of the tail levels passed development at one rate and failed the gate.
 - **Step-aware quantiles made no difference** (-0.0002).
+
+## Why the gain is modest, and where the error is
+
+After the first run we measured where the remaining error sits, on the gate dates only.
+
+- **The error is in the timing of steps, not in the intervals.** 97% of the method's loss comes from forecasts where the price moved. Its median forecast equals the last value in 98% of forecasts.
+- **A few expensive series carry most of it.** Ten series hold 55% of the last-value loss, led by marketplace asks for B300, H200 and B200.
+- **There is headroom, but it needs knowledge of the future.** A hindsight method that knows each series' change distribution over the gate window in advance scores +0.44, against +0.20 for the accepted method.
+- **Posted prices are persistent steps, not noise around a level.** We tested the obvious way to move the median: forecast from the 3-day median level instead of the last print. It lost 0.265 skill on the development dates. Trend signals (own two-week trend, class one-week trend) and volatility scaling were also rejected.
+
+So the last posted value is the right centre, and a short-horizon forecaster for this market earns its skill from intervals. Predicting which day a provider re-prices would need information that is not in posted prices.
 
 ## Phantom capacity: a negative result
 
@@ -87,7 +98,7 @@ The same tables show what did carry direction. A series below its 30-day median 
 1. **Short-run intervals should be set per instrument, from the series' own step history plus its class.** One width for all series is wrong in both directions: too wide for list prices, too narrow for marketplace asks in an active month.
 2. **Do not shorten the history window because the market "changed".** It cost accuracy here every time.
 3. **Offer counts are a volatility signal.** Use them to widen an interval, not to shift a price.
-4. **Be suspicious of any rule tuned on the last few months of this market.** 18 of 21 improvements found on one period did not hold on the next.
+4. **Be suspicious of any rule tuned on the last few months of this market.** 14 of 17 improvements found on one period did not hold on the next.
 
 ## The 2 to 3 year view
 
@@ -98,6 +109,8 @@ This part cannot be scored. It is an argument from the pack, with each instrumen
 - **Posted rental prices rose across generations over the past year.** In the GetDeploying weekly on-demand medians, the H100 went from $2.98 in the week of November 3, 2025 to a low of $2.49 in the week of March 2, 2026 and to $3.85 in the week of October 26, 2026. The A100 went from $1.60 to a low of $1.45 to $1.79 over the same weeks.
 - **Newer chips rose most in the last three months.** In one collector's neocloud rate-card medians from August 4 to November 6, 2026: B300 $8.25 to $9.75, B200 $6.69 to $7.89, H100 SXM $3.23 to $3.55, A100 SXM $1.79 to $1.95, H200 $4.38 to $4.59.
 - **Older chips are not priced at capability parity.** The brief gives an H100 2.46 times the inference throughput of an A100. At the November 6 rate-card medians above, an A100 hour costs $1.95 and an H100 hour $3.55, so the A100 costs about 35% more per unit of inference work. Its rental price is holding a floor that throughput alone does not explain.
+
+- **Public sources dated before November 6, 2026, found by the scout through Exa, point the same way, with early signs of easing.** Headlines only; we did not verify their numbers. Rising: ["Nvidia B200 Rental Prices Surge Toward $8 per GPU-Hour as Blackwell Compute Tightens"](https://aiindustrytoday.com/news/nvidia-b200-rental-prices-surge-toward-8-per-gpu-hour-as-blackwell-compute-tightens/) (September 23); ["AI compute crunch deepens as chip rental costs jump 60% and rivals scramble for power"](https://investinglive.com/stocks/ai-compute-crunch-deepens-as-chip-rental-costs-jump-60-and-rivals-scramble-for-power/) (October 13); ["NVIDIA GPUs Are Becoming Appreciating Assets In The ..."](https://wccftech.com/nvidia-gpus-appreciating-assets-a100-rental-premium/) (October 24). Cause: ["Power and Cooling Are the New GPU Shortage"](https://datastorage.com/articles/power-and-cooling-are-the-new-gpu-shortage-inside-the-data-center-bottleneck/) (August 12). Easing: ["H100 Rental Prices Show Signs of Easing This Week, About 19% Below October Average"](https://www.insigtx.com/en/news/h100-rental-prices-show-signs-of-easing-this-week-about-19-504193/) (November 2); ["Ax3 Pulse — B300 rental index slides below $7 — on-demand is softening, term is not"](https://www.ax3.ai/news-b300-rental-slide) (November 4). All 33 results are in [results/exa_evidence.md](results/exa_evidence.md).
 
 **Reading.** A depreciation schedule that marks an older chip down in proportion to the capability of its successors would have been wrong over this year: the older chips' posted prices went up. What they earn appears to be set by scarcity of any usable capacity, not by relative throughput.
 
@@ -113,4 +126,4 @@ Resale value follows the rental stream a buyer expects, so the same split applie
 
 ## Limits
 
-See the README. The main ones: the lockbox is 11 consecutive days; the seed hypotheses were written by people working with an AI coding agent, not generated by the loop; the event forecast for November 7, 9 and 13 was unscored when this was written.
+See the README. The main ones: the lockbox is 11 consecutive days and was scored twice with an unchanged method; the seed hypotheses were written by people working with an AI coding agent, not generated by the loop; web evidence is cited but does not decide what is accepted; the event forecast for November 7, 9 and 13 was unscored when this was written.

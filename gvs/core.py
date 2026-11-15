@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import dataclasses
 import json
+import os
 import warnings
 
 import numpy as np
@@ -17,7 +18,8 @@ import pandas as pd
 HORIZONS = (1, 3, 7)
 QUANTILES = np.array([0.1, 0.5, 0.9])
 EPOCH = pd.Timestamp("2026-01-01")
-STATE_FEATURES = ("since_change", "last_dir", "offer_trend", "provider_change", "deviation", "peer_lead", "newgen_lead")
+STATE_FEATURES = ("since_change", "last_dir", "offer_trend", "provider_change", "deviation", "peer_lead", "newgen_lead",
+                  "own_trend", "class_trend")
 NEW_GENERATION = ("B200", "B300", "H200")
 
 
@@ -47,6 +49,8 @@ class Config:
     self_gate_days: int | None = None     # grade own past forecasts per series over this window; abstain where they lost
     self_gate_min: int = 9                # graded forecasts needed before the gate may close
     self_gate_start_closed: bool = False  # True: stay on the last value until the method has earned the right to move
+    anchor: tuple[tuple[str, int], ...] = ()  # (instrument class or "*", k): forecast from the k-day median level, not the last print
+    vol_scale: bool = False               # rescale past changes by how volatile the series is now versus then
 
     def with_(self, **changes) -> "Config":
         return dataclasses.replace(self, **changes)
@@ -54,6 +58,10 @@ class Config:
     def with_condition(self, feature: str, mismatch_weight: float) -> "Config":
         kept = tuple(c for c in self.condition if c[0] != feature)
         return self.with_(condition=kept + ((feature, mismatch_weight),))
+
+    def with_anchor(self, instrument_class: str, days: int | None) -> "Config":
+        kept = tuple(c for c in self.anchor if c[0] != instrument_class)
+        return self.with_(anchor=kept if days is None else kept + ((instrument_class, days),))
 
     def with_width(self, instrument_class: str, scale: float) -> "Config":
         kept = tuple(c for c in self.width_scale if c[0] != instrument_class)
@@ -66,7 +74,7 @@ class Config:
 class Panel:
     """Posted-rental daily medians as dense series-by-day arrays, plus observable market states."""
 
-    def __init__(self, series_csv: str, catalog_csv: str):
+    def __init__(self, series_csv: str, catalog_csv: str, news_csv: str | None = None):
         cols = ["series_id", "date", "value", "n_obs", "n_providers", "source_id", "instrument_class"]
         df = pd.read_csv(series_csv, usecols=cols)
         df = df[~df.series_id.str.startswith("aws_spot.")].copy()
@@ -96,7 +104,15 @@ class Panel:
         self.observed = ~np.isnan(self.value)
         self.providers = pd.DataFrame(providers.T).ffill().to_numpy().T
         self.log_change = {h: self._forward_log_change(h) for h in HORIZONS}
+        self._anchor_cache: dict[int, np.ndarray] = {}
+        self._anchor_change_cache: dict[tuple[int, int], np.ndarray] = {}
+        day_move = np.abs(pd.DataFrame(np.log(self.last_value).T).diff()).rolling(14, min_periods=5).mean()
+        self.volatility = day_move.fillna(0.0).to_numpy().T + 0.002
         self.state = self._build_states(pd.DataFrame(offers.T).ffill())
+        if news_csv and os.path.exists(news_csv):
+            news = self._news_state(news_csv)
+            if news is not None:
+                self.state["news"] = news
         self._groups = {
             "class": self._group_index(self.instrument_class),
             "source_class": self._group_index(np.char.add(np.char.add(self.source.astype(str), "|"), self.instrument_class.astype(str))),
@@ -107,6 +123,38 @@ class Panel:
         out = np.full(self.value.shape, np.nan)
         out[:, :-h] = np.log(self.value[:, h:] / self.last_value[:, :-h])
         return out
+
+    def _news_state(self, news_csv: str) -> np.ndarray | None:
+        """+1 / -1 when the last completed week had a higher / lower share of price-rise news than usual.
+
+        A week counts only once it has ended, and "usual" is the median of earlier weeks only, so the
+        state on any day uses nothing published on or after that day.
+        """
+        news = pd.read_csv(news_csv).pivot(index="week_start", columns="name", values="count").fillna(0).sort_index()
+        if (news.max() - news.min()).max() <= 1:
+            return None  # every week hit the search's result cap: the count says nothing
+        share = (news["price_up"] + 1) / (news["price_up"] + news["price_down"] + 2)
+        usual = share.expanding(min_periods=3).median().shift(1)
+        signal = np.sign(share - usual).fillna(0)
+        by_day = np.zeros(self.n_days)
+        for week_start, value in signal.items():
+            first_usable = day_index(week_start) + 7
+            if first_usable < self.n_days:
+                by_day[first_usable: first_usable + 7] = value
+        return np.repeat(by_day[None, :], len(self.ids), axis=0).astype(np.int8)
+
+    def level(self, k: int) -> np.ndarray:
+        """Median of the last k days of the series: a level estimate that ignores one-day flickers."""
+        if k not in self._anchor_cache:
+            self._anchor_cache[k] = pd.DataFrame(self.last_value.T).rolling(k, min_periods=1).median().to_numpy().T
+        return self._anchor_cache[k]
+
+    def log_change_from_level(self, k: int, h: int) -> np.ndarray:
+        if (k, h) not in self._anchor_change_cache:
+            out = np.full(self.value.shape, np.nan)
+            out[:, :-h] = np.log(self.value[:, h:] / self.level(k)[:, :-h])
+            self._anchor_change_cache[(k, h)] = out
+        return self._anchor_change_cache[(k, h)]
 
     @staticmethod
     def _group_index(labels: np.ndarray) -> list[np.ndarray]:
@@ -153,8 +201,22 @@ class Panel:
         market = np.sign(week_step[is_new].sum(axis=0)) if is_new.any() else np.zeros(t)
         newgen_lead = np.where(is_new[:, None], 0, market[None, :])
 
+        log_lv = np.log(lv)
+        two_week = (log_lv - log_lv.shift(14)).to_numpy().T
+        own_trend = np.where(two_week < -0.02, -1, np.where(two_week > 0.02, 1, 0))
+
+        week = (log_lv - log_lv.shift(7)).to_numpy().T
+        class_trend = np.zeros((n, t))
+        for cls in np.unique(self.instrument_class):
+            idx = np.flatnonzero(self.instrument_class == cls)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                avg = np.nanmean(week[idx], axis=0)
+            class_trend[idx] = np.where(avg < -0.005, -1, np.where(avg > 0.005, 1, 0))[None, :]
+
         states = dict(since_change=since_change, last_dir=last_dir, offer_trend=offer_trend,
-                      provider_change=provider_change, deviation=deviation, peer_lead=peer_lead, newgen_lead=newgen_lead)
+                      provider_change=provider_change, deviation=deviation, peer_lead=peer_lead, newgen_lead=newgen_lead,
+                      own_trend=own_trend, class_trend=class_trend)
         return {k: v.astype(np.int8) for k, v in states.items()}
 
     def moving_at(self, origin: int) -> np.ndarray:
@@ -192,13 +254,24 @@ def weighted_quantiles(values: np.ndarray, weights: np.ndarray, levels: np.ndarr
     return np.interp(levels, (cum - 0.5 * w) / cum[-1], v)
 
 
-def forecast_log_quantiles(panel: Panel, cfg: Config, i: int, origin: int, h: int,
-                           levels: np.ndarray = QUANTILES) -> np.ndarray:
-    """q10, q50, q90 of the h-day log change for series i, from windows that closed on or before the origin."""
+def forecast_quantiles(panel: Panel, cfg: Config, i: int, origin: int, h: int,
+                       levels: np.ndarray = QUANTILES) -> np.ndarray:
+    """q10, q50, q90 of the price h days after the origin, from windows that closed on or before the origin."""
+    last = panel.last_value[i, origin]
+    anchors = dict(cfg.anchor)
+    k = anchors.get(panel.instrument_class[i], anchors.get("*"))
+    changes = panel.log_change[h] if k is None else panel.log_change_from_level(k, h)
+    base = last if k is None else panel.level(k)[i, origin]
+    a = _log_quantiles(panel, cfg, changes, i, origin, h, levels)
+    return np.full(3, last) if a is None else base * np.exp(a)
+
+
+def _log_quantiles(panel: Panel, cfg: Config, changes: np.ndarray, i: int, origin: int, h: int,
+                   levels: np.ndarray) -> np.ndarray | None:
     stop = origin - h + 1
     start = 0 if cfg.lookback_days is None else max(0, stop - cfg.lookback_days)
     if stop <= start:
-        return np.zeros(3)
+        return None
     age = (stop - 1) - np.arange(start, stop)
     recency = np.ones(stop - start) if cfg.halflife_days is None else 0.5 ** (age / cfg.halflife_days)
 
@@ -209,7 +282,12 @@ def forecast_log_quantiles(panel: Panel, cfg: Config, i: int, origin: int, h: in
             w = w * np.where(s[rows, start:stop] == s[i, origin], 1.0, mismatch)
         return w
 
-    y = panel.log_change[h][i, start:stop]
+    def rescale(rows, y):
+        if not cfg.vol_scale:
+            return y
+        return y * np.clip(panel.volatility[i, origin] / panel.volatility[rows, start:stop], 0.5, 2.0)
+
+    y = rescale(i, changes[i, start:stop])
     ok = ~np.isnan(y)
     values, weights = y[ok], (recency * state_match(i))[ok]
 
@@ -217,7 +295,7 @@ def forecast_log_quantiles(panel: Panel, cfg: Config, i: int, origin: int, h: in
         peers = panel._groups[cfg.pool][i]
         peers = peers[peers != i]
         if len(peers):
-            yp = panel.log_change[h][peers, start:stop]
+            yp = rescale(peers, changes[peers, start:stop])
             wp = recency[None, :] * state_match(peers)
             okp = ~np.isnan(yp)
             if okp.any() and wp[okp].sum() > 0:
@@ -225,7 +303,7 @@ def forecast_log_quantiles(panel: Panel, cfg: Config, i: int, origin: int, h: in
                 values, weights = np.concatenate([values, yp[okp]]), np.concatenate([weights, wp])
 
     if weights.sum() < cfg.min_samples or len(values) < 3:
-        return np.zeros(3)
+        return None
     a = weighted_quantiles(values, weights, levels, cfg.step_quantiles)
     if cfg.center == "last":
         a[1] = 0.0
@@ -296,8 +374,7 @@ def backtest(panel: Panel, cfg: Config, origins: list[int], series_at=None, warm
                     continue
                 key = (panel.instrument_class[i], h)
                 levels = learner.levels_for(key) if adaptive else QUANTILES
-                a = forecast_log_quantiles(panel, cfg, i, origin, h, levels)
-                q = last * np.exp(a)
+                q = forecast_quantiles(panel, cfg, i, origin, h, levels)
                 known = origin + h <= panel.last_day and not np.isnan(panel.value[i, origin + h])
                 if not known:
                     continue

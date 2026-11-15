@@ -1,6 +1,7 @@
 {
   "final_method": {
     "adaptive_rate": 0.0,
+    "anchor": [],
     "center": "drift",
     "condition": [
       [
@@ -25,6 +26,7 @@
       1.0,
       1.0
     ],
+    "vol_scale": false,
     "width_scale": []
   },
   "splits": {

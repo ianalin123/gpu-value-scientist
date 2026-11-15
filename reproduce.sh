@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One command: rebuild the series from the pack, rerun the research loop from an empty memory,
+# One command: rebuild the series from the pack, rerun the research loop from an empty research log,
 # score the surviving method once on the lockbox, check it with the organisers' scorer at their
 # demo cutoff, and write the forecast file for the event origin (2026-11-06, horizons 1, 3, 7).
 # Usage: bash reproduce.sh <path to gpu-price-pack-v0.1.1-handover> [out_dir]
@@ -20,8 +20,12 @@ $PY -I -B "$STARTER/build_series.py" --pack "$PACK" --cutoff "$DEMO_CUTOFF" --me
 
 echo "== 2. research loop (dev and gate origins only; about 5 minutes)"
 rm -f "$OUT/research_log.jsonl"
+# The scout reads dated web evidence through Exa (served from results/exa_cache.json when there is no key),
+# and the agents share one memory on past.dev (a local file stands in when there is no key).
+rm -f "$OUT/memory_log.jsonl"
 $PY -m gvs.scientist --series "$OUT/series_daily.csv" --catalog "$OUT/series_catalog.csv" \
-    --log "$OUT/research_log.jsonl" --out-config "$OUT/final_config.json"
+    --log "$OUT/research_log.jsonl" --out-config "$OUT/final_config.json" \
+    --scout --news results/exa_news_weekly.csv --memory-log "$OUT/memory_log.jsonl"
 $PY -m gvs.render_log "$OUT/research_log.jsonl" > "$OUT/research_log.md"
 
 echo "== 3. lockbox score against the organisers' drift baseline, and the event forecast"
