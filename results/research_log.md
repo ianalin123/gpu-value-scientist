@@ -1,6 +1,6 @@
 # Research log
 
-67 hypotheses tested, 17 improved the development dates, 3 also improved the unseen gate dates and were kept.
+80 hypotheses tested, 19 improved the development dates, 3 also improved the unseen gate dates and were kept.
 
 | ID | Hypothesis | Where it came from | Dev gain (p) | Gate gain (p) | Verdict | Web evidence the proposer read |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -72,3 +72,16 @@
 | R1.48 | interval width x0.8 for neocloud_spot | refinement of the accepted method | +0.0040 (1.00) | -0.0029 (0.00) | rejected at the gate |  |
 | R1.49 | interval width x1.25 for neocloud_spot | refinement of the accepted method | -0.0053 (0.00) | not run | rejected on dev |  |
 | R1.50 | interval width x1.5 for neocloud_spot | refinement of the accepted method | -0.0114 (0.00) | not run | rejected on dev |  |
+| L1.01 | Marketplace asks for new-generation GPUs reprice much more often and in bigger steps than the rest of their class, so their q10-q90 intervals should be wider. | language-model proposer (claude-opus-5-5 via the claude CLI), round 1 | -0.0055 (0.09) | not run | rejected on dev |  |
+| L1.02 | Committee-set rate cards change rarely and in planned steps, so pooled change distributions make their intervals too wide. | language-model proposer (claude-opus-5-5 via the claude CLI), round 1 | +0.0172 (1.00) | -0.0091 (0.00) | rejected at the gate |  |
+| L1.03 | Prices are cut quickly and raised slowly: as Blackwell supply ramps up, downward steps are bigger than history shows and upward steps are smaller. | language-model proposer (claude-opus-5-5 via the claude CLI), round 1 | +0.0031 (0.78) | not run | rejected on dev |  |
+| L1.04 | Price changes come in campaigns of same-direction steps, so the last-step-direction state should be weighted much more sharply than 0.3. | language-model proposer (claude-opus-5-5 via the claude CLI), round 1 | -0.0034 (0.15) | not run | rejected on dev |  |
+| L1.05 | A deviation from the 30-day median caused by a provider joining or leaving reverses, while a deviation without one persists, so the two states should condition together. | language-model proposer (claude-opus-5-5 via the claude CLI), round 1 | -0.0100 (0.00) | not run | rejected on dev |  |
+| L1.06 | New-generation series have too little history of their own, so changes borrowed from their class should count for much more than 20 observations. | language-model proposer (claude-opus-5-5 via the claude CLI), round 1 | -0.0091 (0.06) | not run | rejected on dev |  |
+| L1.07 | The cheapest-offer price on an aggregator flickers when one unusually cheap listing appears for a day and then vanishes, so this class alone should forecast from a 2-day median level. | language-model proposer (claude-opus-5-5 via the claude CLI), round 1 | -0.0024 (0.06) | not run | rejected on dev |  |
+| L1.08 | A price that has been flat for a long time while the number of posted offers shrinks is about to step. Neither signal works alone, but together they mark a stale price under real supply pressure. | language-model proposer (claude-opus-5-5 via the claude CLI), round 1 | -0.0120 (0.00) | not run | rejected on dev |  |
+| L2.01 | Blackwell supply ramping through late 2026 makes posted cuts on older and mid-generation chips bigger than history shows, while price rises stay at their usual size. | language-model proposer (claude-opus-5-5 via the claude CLI), round 2 | +0.0005 (0.59) | not run | rejected on dev |  |
+| L2.03 | New-generation chips follow their own price path, a launch premium that wears off, which their class does not share. Changes borrowed from the class should count for less than 20 observations. | language-model proposer (claude-opus-5-5 via the claude CLI), round 2 | -0.0936 (0.00) | not run | rejected on dev |  |
+| L2.05 | Neocloud rate cards reprice rarely and in published steps, so their intervals should be narrower than pooled history implies. | language-model proposer (claude-opus-5-5 via the claude CLI), round 2 | +0.0156 (1.00) | -0.0069 (0.00) | rejected at the gate |  |
+| L2.06 | Reverting to the 30-day median is the main force on posted asks. A dip below the median, caused by one cheap batch of listings, is undone within days, so the deviation state should be weighted much more sharply. | language-model proposer (claude-opus-5-5 via the claude CLI), round 2 | -0.0075 (0.00) | not run | rejected on dev |  |
+| L2.07 | A price away from its median persists when the offer count confirms a real supply change, and reverts when it does not. Offer trend should be a mild extra condition on top of deviation. | language-model proposer (claude-opus-5-5 via the claude CLI), round 2 | -0.0026 (0.26) | not run | rejected on dev |  |

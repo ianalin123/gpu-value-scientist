@@ -16,5 +16,5 @@ for r in rows:
     dev = "n/a" if r["dev_gain"] is None else f"{r['dev_gain']:+.4f} ({r['dev_p']:.2f})"
     gate = "not run" if r["gate_gain"] is None else f"{r['gate_gain']:+.4f} ({r['gate_p']:.2f})"
     verdict = f"**{r['verdict']}**" if r["verdict"] == "kept" else r["verdict"]
-    cites = " ".join(f"[{e['published']}]({e['url']})" for e in r.get("web_evidence") or [] if e.get("url"))
+    cites = " ".join(f"[{e.get('published') or 'undated'}]({e['url']})" for e in r.get("web_evidence") or [] if e.get("url"))
     print(f"| {r['id']} | {r['claim']} | {r['source']} | {dev} | {gate} | {verdict} | {cites} |")

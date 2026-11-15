@@ -155,7 +155,7 @@ def config_key(cfg: Config) -> str:
 
 
 def run(series_csv: str, catalog_csv: str, log_path: str, max_rounds: int = 3, news_csv: str | None = None,
-        memory=None, evidence: list[dict] | None = None) -> Config:
+        memory=None, evidence: list[dict] | None = None, llm_rounds: int = 0, llm_only: bool = False) -> Config:
     """`memory` is the agents' shared store (gvs.memory.SharedMemory); `evidence` is what the scout found on the web."""
     panel = Panel(series_csv, catalog_csv, news_csv)
     if memory is not None:
@@ -208,8 +208,13 @@ def run(series_csv: str, catalog_csv: str, log_path: str, max_rounds: int = 3, n
                             gate_p=None, verdict="not testable: Exa returned its 25-result cap in every week, so the count carries no signal"))
             return False
         candidate = hyp["edit"](current)
+        if candidate is None:
+            print(f"[{hyp_id}] INVALID PROPOSAL (outside the edit grammar) | {hyp['claim']}")
+            return False
         key = config_key(candidate)
         if key in tried or candidate == current:
+            if hyp_id.startswith("L"):
+                print(f"[{hyp_id}] DUPLICATE of a method already tested | {hyp['claim']}")
             return False
         tried.add(key)
         support = []
@@ -220,7 +225,8 @@ def run(series_csv: str, catalog_csv: str, log_path: str, max_rounds: int = 3, n
         dev_old, gate_old = cells(current)
         d = paired_gain(dev_new, dev_old)
         entry = dict(id=hyp_id, claim=hyp["claim"], source=hyp["source"], family=hyp.get("family"), config_key=key,
-                     web_evidence=[{"url": h["data"].get("url"), "published": h["data"].get("published")} for h in support],
+                     web_evidence=hyp.get("citations") or [{"url": h["data"].get("url"), "published": h["data"].get("published")} for h in support],
+                     rationale=hyp.get("rationale"), edits=hyp.get("edits"),
                      config=json.loads(candidate.to_json()), base_dev_skill=pooled_skill(dev_old),
                      dev_gain=d["gain"], dev_p=d["p_positive"], gate_gain=None, gate_p=None)
         if not (d["gain"] > 0 and d["p_positive"] >= DEV_P):
@@ -249,11 +255,11 @@ def run(series_csv: str, catalog_csv: str, log_path: str, max_rounds: int = 3, n
         kept = {h["data"].get("family") for h in hits if h.get("data", {}).get("verdict") == "kept"}
         return failed - kept - {None}
 
-    for hyp in seed_hypotheses():
+    for hyp in ([] if llm_only else seed_hypotheses()):
         test({**hyp, "family": SEED_FAMILY[hyp["id"]]}, hyp["id"])
     classes = sorted(set(panel.instrument_class[i] for o in origin_range(GATE)[::5] for i in panel.moving_at(o)))
     skipped = []
-    for rnd in range(1, max_rounds + 1):
+    for rnd in range(1, (0 if llm_only else max_rounds) + 1):
         kept_any = False
         avoid = families_the_critic_failed_at_the_gate()
         if avoid:
@@ -266,6 +272,14 @@ def run(series_csv: str, catalog_csv: str, log_path: str, max_rounds: int = 3, n
         if not kept_any:
             print(f"round {rnd}: nothing survived the gate; stopping")
             break
+    for rnd in range(1, llm_rounds + 1):
+        from gvs.llm_proposer import propose
+        # The model sees the seed results and its own earlier rounds: development gains and verdicts, never gate scores.
+        seen = [h for h in history if h["id"].startswith(("H", "L"))]
+        proposals, citations, model = propose(current, seen)
+        print(f"language-model round {rnd}: {model or 'no model available'} proposed {len(proposals)} hypotheses, citing {len(citations)} sources")
+        for n, hyp in enumerate(proposals, start=1):
+            test({**hyp, "source": f"language-model proposer ({model}), round {rnd}", "citations": citations[:4]}, f"L{rnd}.{n:02d}")
     print("final method:", current.to_json())
     if memory is not None:
         memory.wait_until_indexed()
@@ -294,6 +308,8 @@ if __name__ == "__main__":
     ap.add_argument("--scout", action="store_true", help="let the scout gather dated web evidence through Exa (cached)")
     ap.add_argument("--memory-log", help="turn on the shared agent memory and mirror every write and recall here")
     ap.add_argument("--memory-namespace", default=time.strftime("gvs-run-%Y%m%dT%H%M%S"))
+    ap.add_argument("--llm-rounds", type=int, default=0, help="rounds in which a language model writes the hypotheses")
+    ap.add_argument("--llm-only", action="store_true", help="resume from the log and run only the language-model rounds")
     args = ap.parse_args()
     memory = evidence = None
     if args.memory_log:
@@ -304,7 +320,8 @@ if __name__ == "__main__":
         scout = Scout()
         evidence = [{**item, "query": q} for q in EVIDENCE_QUERIES for item in scout.search(q, EVIDENCE_START, LAST_DAY, n=6)]
         print(f"scout: {len(evidence)} dated web results from Exa, ${scout.spent():.2f} spent this run")
-    final = run(args.series, args.catalog, args.log, news_csv=args.news, memory=memory, evidence=evidence)
+    final = run(args.series, args.catalog, args.log, news_csv=args.news, memory=memory, evidence=evidence,
+                llm_rounds=args.llm_rounds, llm_only=args.llm_only)
     if memory is not None:
         print("shared memory:", json.dumps(memory.summary()))
     with open(args.out_config, "w") as f:

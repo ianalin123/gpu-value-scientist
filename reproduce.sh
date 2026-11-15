@@ -21,11 +21,12 @@ $PY -I -B "$STARTER/build_series.py" --pack "$PACK" --cutoff "$DEMO_CUTOFF" --me
 echo "== 2. research loop (dev and gate origins only; about 5 minutes)"
 rm -f "$OUT/research_log.jsonl"
 # The scout reads dated web evidence through Exa (served from results/exa_cache.json when there is no key),
-# and the agents share one memory on past.dev (a local file stands in when there is no key).
+# the agents share one memory on past.dev (a local file stands in when there is no key), and in the last two
+# rounds a language model writes the hypotheses (replayed from results/llm_cache.json when no model is available).
 rm -f "$OUT/memory_log.jsonl"
 $PY -m gvs.scientist --series "$OUT/series_daily.csv" --catalog "$OUT/series_catalog.csv" \
     --log "$OUT/research_log.jsonl" --out-config "$OUT/final_config.json" \
-    --scout --news results/exa_news_weekly.csv --memory-log "$OUT/memory_log.jsonl"
+    --scout --news results/exa_news_weekly.csv --memory-log "$OUT/memory_log.jsonl" --llm-rounds 2
 $PY -m gvs.render_log "$OUT/research_log.jsonl" > "$OUT/research_log.md"
 
 echo "== 3. lockbox score against the organisers' drift baseline, and the event forecast"
