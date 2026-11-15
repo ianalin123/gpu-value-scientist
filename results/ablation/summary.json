@@ -21,8 +21,28 @@
    "lockbox_coverage": 0.814
   },
   {
+   "rule": "gate_p80",
+   "label": "Gate, 80% confidence",
+   "hypotheses_tested": 71,
+   "kept": 3,
+   "dev_skill": 0.1347,
+   "gate_skill": 0.2045,
+   "lockbox_skill": 0.2509,
+   "lockbox_coverage": 0.814
+  },
+  {
    "rule": "gate_p90",
    "label": "Gate, 90% confidence (the submitted rule)",
+   "hypotheses_tested": 71,
+   "kept": 3,
+   "dev_skill": 0.1347,
+   "gate_skill": 0.2045,
+   "lockbox_skill": 0.2509,
+   "lockbox_coverage": 0.814
+  },
+  {
+   "rule": "gate_p95",
+   "label": "Gate, 95% confidence",
    "hypotheses_tested": 71,
    "kept": 3,
    "dev_skill": 0.1347,

@@ -14,13 +14,14 @@ import modal
 app = modal.App("gpu-value-scientist-orderings")
 DATA = os.environ.get("GVS_DATA", "out")
 N = int(os.environ.get("GVS_ORDERINGS", "10"))
+START = int(os.environ.get("GVS_ORDER_START", "0"))
 image = (modal.Image.debian_slim(python_version="3.12").pip_install("pandas", "numpy")
          .add_local_dir("gvs", "/root/gvs")
          .add_local_file(f"{DATA}/series_daily.csv", "/root/data/series_daily.csv")
          .add_local_file(f"{DATA}/series_catalog.csv", "/root/data/series_catalog.csv"))
 
 
-@app.function(image=image, cpu=2, memory=4096, timeout=3000)
+@app.function(image=image, cpu=2, memory=4096, timeout=3000, max_containers=50)
 def run_one(rule: str, order_seed: int) -> dict:
     import sys
     sys.path.insert(0, "/root")
@@ -39,7 +40,7 @@ def run_one(rule: str, order_seed: int) -> dict:
 
 @app.local_entrypoint()
 def main(out: str = "results/ablation/orderings.json"):
-    jobs = [(rule, seed) for seed in range(N) for rule in ("gate", "dev_only")]
+    jobs = [(rule, seed) for seed in range(START, START + N) for rule in ("gate", "dev_only")]
     results = []
     for r in run_one.starmap(jobs, order_outputs=False):
         results.append(r)
